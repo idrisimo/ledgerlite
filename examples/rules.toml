@@ -1,0 +1,62 @@
+# Example ledgerlite rules. Rules are checked top to bottom; the first match wins.
+# Anything that matches no rule is reported as "Uncategorised".
+#
+# Each rule has a category plus any of:
+#   contains   - substring(s) of the description, case-insensitive
+#   regex      - regular expression(s), case-insensitive
+#   min_amount / max_amount - bounds on the absolute transaction amount
+
+# How to read the CSV (these are the defaults for a Debit/Credit export).
+# For a single signed column use: amount = "Amount"
+[import]
+date = "Date"
+description = "Description"
+debit = "Debit"
+credit = "Credit"
+date_format = "%d/%m/%Y"
+
+[[rules]]
+category = "Income"
+contains = ["salary", "hmrc refund"]
+
+[[rules]]
+category = "Housing"
+contains = ["lettings direct", "council tax"]
+
+[[rules]]
+category = "Bills"
+regex = "british gas|thames water|virgin media|octopus"
+
+[[rules]]
+category = "Subscriptions"
+contains = ["netflix", "spotify", "disney"]
+
+[[rules]]
+category = "Health & Fitness"
+contains = ["pure gym", "boots"]
+
+[[rules]]
+category = "Groceries"
+contains = ["tesco", "sainsbury", "aldi", "lidl", "waitrose"]
+
+[[rules]]
+category = "Transport"
+regex = "\\btfl\\b|lner|trainline|uber"
+
+[[rules]]
+category = "Eating Out"
+regex = "pret|costa|deliveroo|wetherspoon|nando"
+
+[[rules]]
+category = "Entertainment"
+contains = ["cineworld", "odeon", "ticketmaster"]
+
+# First match wins: big Amazon orders are caught here before the general rule.
+[[rules]]
+category = "Big Purchases"
+contains = ["amazon"]
+min_amount = 50
+
+[[rules]]
+category = "Shopping"
+contains = ["amazon", "argos", "john lewis"]
